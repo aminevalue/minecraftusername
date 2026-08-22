@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { lookupUsername } from "@/lib/mojang";
+import { fetchSkinUrl, lookupUsername } from "@/lib/mojang";
 
 export async function GET(request: NextRequest) {
   const username = request.nextUrl.searchParams.get("username") ?? "";
+  const includeSkin = request.nextUrl.searchParams.get("includeSkin") === "true";
 
   if (!username) {
     return NextResponse.json(
@@ -12,6 +13,10 @@ export async function GET(request: NextRequest) {
   }
 
   const result = await lookupUsername(username);
+
+  if (includeSkin && result.status === "taken" && result.uuid) {
+    result.skinUrl = await fetchSkinUrl(result.uuid);
+  }
 
   const httpStatus =
     result.status === "rate_limited" ? 429 : result.status === "error" ? 502 : 200;

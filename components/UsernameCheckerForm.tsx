@@ -8,6 +8,7 @@ interface Props {
   initialUsername?: string;
   exactLength?: number;
   ctaLabel?: string;
+  showSkin?: boolean;
 }
 
 function formatError(username: string, exactLength?: number): string | null {
@@ -24,7 +25,12 @@ function formatError(username: string, exactLength?: number): string | null {
   return null;
 }
 
-export default function UsernameCheckerForm({ initialUsername = "", exactLength, ctaLabel = "Check availability" }: Props) {
+export default function UsernameCheckerForm({
+  initialUsername = "",
+  exactLength,
+  ctaLabel = "Check availability",
+  showSkin = false,
+}: Props) {
   const [username, setUsername] = useState(initialUsername);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<UsernameLookupResult | null>(null);
@@ -50,7 +56,8 @@ export default function UsernameCheckerForm({ initialUsername = "", exactLength,
     setResult(null);
 
     try {
-      const res = await fetch(`/api/check-username?username=${encodeURIComponent(trimmed)}`);
+      const skinParam = showSkin ? "&includeSkin=true" : "";
+      const res = await fetch(`/api/check-username?username=${encodeURIComponent(trimmed)}${skinParam}`);
       const data = (await res.json()) as UsernameLookupResult;
       setResult(data);
     } catch {
@@ -151,13 +158,18 @@ function ResultCard({ result, exactLength }: { result: UsernameLookupResult; exa
   if (result.status === "taken") {
     return (
       <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
-        <p className="font-medium">
-          &ldquo;{result.exactName ?? result.username}&rdquo; is currently taken.
-        </p>
-        <p className="mt-1">
-          This name belongs to an active Minecraft (Java Edition) account. It can only become available again if
-          that account is renamed or the name is otherwise released by Mojang.
-        </p>
+        <div className="flex items-start gap-3">
+          {result.skinUrl && <SkinAvatar skinUrl={result.skinUrl} name={result.exactName ?? result.username} />}
+          <div>
+            <p className="font-medium">
+              &ldquo;{result.exactName ?? result.username}&rdquo; is currently taken.
+            </p>
+            <p className="mt-1">
+              This name belongs to an active Minecraft (Java Edition) account. It can only become available again if
+              that account is renamed or the name is otherwise released by Mojang.
+            </p>
+          </div>
+        </div>
         <p className="mt-3">
           <Link href="/minecraft-username-generator" className="font-medium text-rose-900 underline">
             Try the generator for alternative ideas →
@@ -175,6 +187,32 @@ function ResultCard({ result, exactLength }: { result: UsernameLookupResult; exa
         someone else could claim it before you do, and this check doesn&apos;t cover Bedrock gamertags or
         Mojang-blocked words.
       </p>
+    </div>
+  );
+}
+
+const SKIN_AVATAR_SIZE = 56;
+const SKIN_TEXTURE_WIDTH = 64;
+
+function SkinAvatar({ skinUrl, name }: { skinUrl: string; name: string }) {
+  const scale = SKIN_AVATAR_SIZE / 8;
+  return (
+    <div
+      className="shrink-0 overflow-hidden rounded-md border border-rose-200 bg-white"
+      style={{ width: SKIN_AVATAR_SIZE, height: SKIN_AVATAR_SIZE }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element -- cropped via inline transform, next/image can't do this */}
+      <img
+        src={skinUrl}
+        alt={`Current Minecraft skin for ${name}`}
+        style={{
+          maxWidth: "none",
+          width: SKIN_TEXTURE_WIDTH * scale,
+          height: "auto",
+          imageRendering: "pixelated",
+          transform: `translate(-${8 * scale}px, -${8 * scale}px)`,
+        }}
+      />
     </div>
   );
 }

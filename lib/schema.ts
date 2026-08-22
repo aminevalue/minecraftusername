@@ -33,6 +33,23 @@ export function breadcrumbJsonLd(items: { name: string; href: string }[]) {
   };
 }
 
+export function softwareApplicationJsonLd(options: { name: string; description: string; url: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: options.name,
+    description: options.description,
+    url: options.url,
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+}
+
 export function faqJsonLd(faqs: { question: string; answer: string }[]) {
   return {
     "@context": "https://schema.org",

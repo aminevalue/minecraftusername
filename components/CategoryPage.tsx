@@ -82,7 +82,7 @@ export default function CategoryPage({ category }: { category: CategoryContent }
 
       <RelatedLinks title="More name ideas" links={otherCategories.map((c) => ({ href: `/${c.slug}`, label: c.navLabel, description: c.metaDescription.slice(0, 80) }))} />
 
-      <RelatedLinks title="Tools" links={[TOOL_LINKS[0], TOOL_LINKS[1]]} />
+      <RelatedLinks title="Tools" links={[TOOL_LINKS[0], TOOL_LINKS[1], TOOL_LINKS[3]]} />
     </div>
   );
 }

@@ -10,6 +10,7 @@ export interface UsernameLookupResult {
   username: string;
   uuid?: string;
   exactName?: string;
+  skinUrl?: string;
 }
 
 const USERNAME_FORMAT = /^[A-Za-z0-9_]{3,16}$/;
@@ -72,4 +73,50 @@ export async function lookupUsername(rawUsername: string): Promise<UsernameLooku
   }
 
   return result;
+}
+
+interface MojangProfileProperty {
+  name: string;
+  value: string;
+}
+
+interface MojangProfileResponse {
+  properties?: MojangProfileProperty[];
+}
+
+interface SkinTexturePayload {
+  textures?: {
+    SKIN?: { url?: string };
+  };
+}
+
+/**
+ * Best-effort lookup of a player's current skin texture URL, straight from
+ * Mojang's own session server (the same official source as the username
+ * lookup above — no third-party skin-render service involved). Returns
+ * undefined on any failure; callers must never fail the underlying username
+ * check because this is unavailable.
+ */
+export async function fetchSkinUrl(uuid: string): Promise<string | undefined> {
+  try {
+    const res = await fetch(
+      `https://sessionserver.mojang.com/session/minecraft/profile/${encodeURIComponent(uuid)}`,
+      { headers: { Accept: "application/json" }, cache: "no-store" }
+    );
+    if (res.status !== 200) return undefined;
+
+    const data = (await res.json()) as MojangProfileResponse;
+    const texturesProperty = data.properties?.find((p) => p.name === "textures");
+    if (!texturesProperty) return undefined;
+
+    const decoded = Buffer.from(texturesProperty.value, "base64").toString("utf-8");
+    const payload = JSON.parse(decoded) as SkinTexturePayload;
+    const url = payload.textures?.SKIN?.url;
+    // Mojang serves these over plain http:// — upgrade to https to avoid
+    // mixed-content blocking on our https:// pages (textures.minecraft.net
+    // supports TLS, just doesn't default to it in the API response).
+    return url?.replace(/^http:\/\//, "https://");
+  } catch {
+    return undefined;
+  }
 }

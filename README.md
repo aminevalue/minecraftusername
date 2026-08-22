@@ -61,7 +61,7 @@ npm run lint    # ESLint
 3. Wait for DNS propagation and Vercel's automatic SSL certificate to issue (usually minutes to a
    few hours).
 4. Once live, update `SITE_URL` in [`lib/site.ts`](lib/site.ts) if it ever changes from
-   `https://minecraftusername.com` — every canonical URL, sitemap entry, and JSON-LD reference
+   `https://www.minecraftusername.com` — every canonical URL, sitemap entry, and JSON-LD reference
    reads from that one constant.
 
 ## Google Search Console
@@ -72,7 +72,7 @@ npm run lint    # ESLint
    HTML-tag or file-upload verification method if you prefer not to touch DNS.
 2. Once verified, go to **Sitemaps** in the left nav and submit:
    ```
-   https://minecraftusername.com/sitemap.xml
+   https://www.minecraftusername.com/sitemap.xml
    ```
 3. Use **URL Inspection** on a few key pages (homepage, Username Checker, one category page) and
    request indexing if they aren't picked up automatically within a few days.
@@ -115,9 +115,9 @@ positions. To go live:
 
 ## Verifying pages are indexable
 
-- `https://minecraftusername.com/sitemap.xml` — should list every route in `ALL_STATIC_ROUTES`
+- `https://www.minecraftusername.com/sitemap.xml` — should list every route in `ALL_STATIC_ROUTES`
   (`lib/site.ts`), currently 26 URLs.
-- `https://minecraftusername.com/robots.txt` — should allow `/` and disallow `/api/`.
+- `https://www.minecraftusername.com/robots.txt` — should allow `/` and disallow `/api/`.
 - Every page has a unique `<title>`, meta description, and canonical URL from `generateMetadata` /
   the static `metadata` export in its `page.tsx`.
 - Structured data: `Organization` + `WebSite` on every page (root layout), `BreadcrumbList` on every

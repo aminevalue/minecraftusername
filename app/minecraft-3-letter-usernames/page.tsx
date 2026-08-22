@@ -70,7 +70,7 @@ export default function ThreeLetterPage() {
         ]}
       />
 
-      <RelatedLinks links={[TOOL_LINKS[0], TOOL_LINKS[5], TOOL_LINKS[1]]} />
+      <RelatedLinks links={[TOOL_LINKS[0], TOOL_LINKS[5], TOOL_LINKS[3], TOOL_LINKS[1]]} />
     </div>
   );
 }

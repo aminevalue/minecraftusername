@@ -73,7 +73,7 @@ export default function FourLetterPage() {
         ]}
       />
 
-      <RelatedLinks links={[TOOL_LINKS[0], TOOL_LINKS[4], TOOL_LINKS[1]]} />
+      <RelatedLinks links={[TOOL_LINKS[0], TOOL_LINKS[4], TOOL_LINKS[3], TOOL_LINKS[1]]} />
     </div>
   );
 }

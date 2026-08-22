@@ -1,5 +1,5 @@
 export const SITE_NAME = "Minecraft Username";
-export const SITE_URL = "https://minecraftusername.com";
+export const SITE_URL = "https://www.minecraftusername.com";
 export const SITE_TAGLINE = "Free Minecraft username tools & name ideas";
 export const SITE_DESCRIPTION =
   "Check Minecraft username availability, look up history, preview color styles, and generate name ideas — free tools built for players, not an official Mojang or Microsoft product.";
