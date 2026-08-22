@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Minecraft Username
 
-## Getting Started
+Free Minecraft username tools — availability checker, generator, color/style previewer, and a
+curated name-ideas library. Built with Next.js (App Router) + TypeScript + Tailwind CSS. No
+accounts, no database — the only backend is one thin API route that proxies Mojang's public
+username lookup.
 
-First, run the development server:
+This project is an independent fan site and is not affiliated with Mojang or Microsoft. See
+[/disclaimer](app/disclaimer/page.tsx).
+
+## Stack
+
+- **Next.js 16 (App Router)**, static rendering for all content pages, dynamic rendering only for
+  the two pages that read `searchParams` (`/minecraft-username-checker`, `/minecraft-username-generator`).
+- **Tailwind CSS v4** for styling.
+- **One API route**, [`app/api/check-username/route.ts`](app/api/check-username/route.ts), which
+  proxies `https://api.mojang.com/users/profiles/minecraft/{username}` and classifies the result as
+  `taken | available | invalid | rate_limited | error`. Logic lives in
+  [`lib/mojang.ts`](lib/mojang.ts).
+- No database, no auth, no Supabase.
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build — must pass with zero type errors before deploying
+npm run lint    # ESLint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project structure
 
-## Learn More
+- `app/` — one folder per route. Tool pages pair a server-rendered content shell with a client
+  "island" component for the interactive part (e.g. `UsernameCheckerForm`, `GeneratorTool`,
+  `ColorStyleTool`).
+- `lib/site.ts` — single source of truth for nav links and the full route list (feeds the sitemap,
+  header, and footer, so adding a page here keeps everything in sync).
+- `lib/categories.ts` — curated content (intro copy, name groups, tips, FAQs) for the 12 name-idea
+  category pages, rendered through the shared `components/CategoryPage.tsx` layout.
+- `lib/mojang.ts` — the only piece of code that talks to an external API.
+- `components/AdSlot.tsx` — reserved, labeled ad placeholder. See "Adding AdSense" below.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploying to Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Push this repository to GitHub (or GitLab/Bitbucket).
+2. In the [Vercel dashboard](https://vercel.com/new), import the repository. Framework preset
+   "Next.js" is auto-detected — no build settings need to change.
+3. Deploy. No environment variables are required for the current feature set.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Connecting minecraftusername.com
 
-## Deploy on Vercel
+1. In the Vercel project → **Settings → Domains**, add `minecraftusername.com` (and `www` if you
+   want the redirect).
+2. Vercel will show the DNS records to add at your domain registrar — typically an `A` record to
+   Vercel's IP for the apex domain, and a `CNAME` for `www`. Add them there.
+3. Wait for DNS propagation and Vercel's automatic SSL certificate to issue (usually minutes to a
+   few hours).
+4. Once live, update `SITE_URL` in [`lib/site.ts`](lib/site.ts) if it ever changes from
+   `https://minecraftusername.com` — every canonical URL, sitemap entry, and JSON-LD reference
+   reads from that one constant.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Google Search Console
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Go to [Google Search Console](https://search.google.com/search-console) and add
+   `minecraftusername.com` as a **Domain property** (verifies via DNS TXT record — ask your
+   registrar to add the record Search Console gives you), or as a **URL-prefix property** using the
+   HTML-tag or file-upload verification method if you prefer not to touch DNS.
+2. Once verified, go to **Sitemaps** in the left nav and submit:
+   ```
+   https://minecraftusername.com/sitemap.xml
+   ```
+3. Use **URL Inspection** on a few key pages (homepage, Username Checker, one category page) and
+   request indexing if they aren't picked up automatically within a few days.
+4. `robots.txt` (auto-generated by [`app/robots.ts`](app/robots.ts)) already points crawlers at the
+   sitemap and disallows `/api/`.
+
+## Configuring the Minecraft API
+
+The site currently uses Mojang's public, unauthenticated endpoint
+`https://api.mojang.com/users/profiles/minecraft/{username}` for the Username Checker, the
+Generator's "Check" links, the 3/4-letter checkers, and the History Checker's current-status
+lookup. This was verified live during development (200 = taken, 404 = available).
+
+If Mojang ever changes or further restricts this endpoint:
+
+- All lookup logic is isolated in [`lib/mojang.ts`](lib/mojang.ts) — that's the only file that
+  needs to change.
+- Do **not** silently fall back to guessing or caching stale results as "available" — the existing
+  `rate_limited` / `error` states in `UsernameLookupStatus` exist specifically so the UI can say
+  "we don't know" instead of lying. Keep that contract if you swap the data source.
+- The username-history API Mojang shut down in 2022 has no official replacement. Don't wire in an
+  unofficial/scraped API (e.g. NameMC) without re-reading
+  [`app/minecraft-username-history-checker/page.tsx`](app/minecraft-username-history-checker/page.tsx) —
+  its entire content is written around being honest about that limitation.
+
+## Adding Google AdSense
+
+Ad placement is already reserved via [`components/AdSlot.tsx`](components/AdSlot.tsx), used on the
+homepage and every tool/category page in banner, in-content, and (where relevant) sidebar
+positions. To go live:
+
+1. Get approved for AdSense and get your publisher ID (`ca-pub-XXXXXXXXXXXXXXXX`).
+2. Add the AdSense loader script to `app/layout.tsx`'s `<head>` (via `next/script`, strategy
+   `afterInteractive`).
+3. Replace the placeholder `<div>` inside `AdSlot.tsx` with your `<ins className="adsbygoogle">`
+   unit, keyed by the `size` prop so banner/in-content/sidebar slots can use different ad unit IDs
+   if desired.
+4. Re-run `npm run build` and manually verify no layout shift or accidental-click risk near tool
+   buttons before deploying.
+
+## Verifying pages are indexable
+
+- `https://minecraftusername.com/sitemap.xml` — should list every route in `ALL_STATIC_ROUTES`
+  (`lib/site.ts`), currently 26 URLs.
+- `https://minecraftusername.com/robots.txt` — should allow `/` and disallow `/api/`.
+- Every page has a unique `<title>`, meta description, and canonical URL from `generateMetadata` /
+  the static `metadata` export in its `page.tsx`.
+- Structured data: `Organization` + `WebSite` on every page (root layout), `BreadcrumbList` on every
+  content page, `FAQPage` where genuine FAQs exist — validate with
+  [Google's Rich Results Test](https://search.google.com/test/rich-results) after deploying.
+
+## Pre-launch audit (re-check after any content change)
+
+- [x] `npm run build` and `npm run lint` both pass clean.
+- [x] Checker tool verified against a known-taken name, a random available name, and invalid input.
+- [x] Generator → "Check" link flows into the Checker and auto-runs.
+- [x] Color/Style tool preview and copy (section-sign and ampersand codes) verified.
+- [x] Sitemap/robots serve correct content; icons (`/icon`, `/apple-icon`, `/favicon.ico`,
+      `/manifest.webmanifest`) all resolve without 404s.
+- [x] 404 page renders with real HTTP 404 status and working links back into the site.
+- [x] Mobile viewport checked (375px) — layout and footer navigation both usable.
+- [ ] Swap the `hello@minecraftusername.com` contact address (used across About/Contact/legal
+      pages) for a real inbox before launch.
+- [ ] Submit sitemap in Search Console once the domain is live (see above).
+- [ ] Add the AdSense script once approved (see above).
