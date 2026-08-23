@@ -173,13 +173,26 @@ export default function ColorCheckerPage() {
 
         <div className="mt-8 space-y-4 text-slate-700">
           <h3 className="text-xl font-semibold text-slate-900">Where formatting codes actually work</h3>
-          <ul className="list-disc space-y-2 pl-5">
-            <li>Chat messages (if the server allows color codes in chat)</li>
-            <li>Signs and written/lectern books</li>
-            <li>Server MOTDs and tab-list names, when configured by a server admin</li>
-            <li>Nicknames set through server plugins (e.g. Essentials-style nickname commands)</li>
-            <li>Text components in commands, like <code className="font-mono text-sm">/tellraw</code> and <code className="font-mono text-sm">/title</code></li>
-          </ul>
+          <p>
+            In vanilla Java Edition, typing <code className="font-mono text-sm">§</code> directly into
+            chat disconnects you, and signs and books don&apos;t accept typed color codes at all — as of
+            1.21.6, Java removed even pasting <code className="font-mono text-sm">§</code> into a book.
+            These codes only work in non-gameplay text (<code className="font-mono text-sm">server.properties</code>,
+            resource pack names, world/server names set via NBT) or through commands and datapacks like{" "}
+            <code className="font-mono text-sm">/tellraw</code> and <code className="font-mono text-sm">/title</code>.
+            Real colored chat almost always comes from a server plugin (Paper/Spigot with something like
+            EssentialsChat) translating <code className="font-mono text-sm">&amp;</code> codes server-side
+            — it&apos;s not a vanilla setting. Bedrock Edition is the exception: it supports typing these
+            codes directly into chat, signs, and books natively.
+          </p>
+          <p>
+            For the full breakdown — including a complete code reference and how this compares to
+            Minecraft&apos;s newer hex colors — see our{" "}
+            <Link href="/minecraft-chat-color-codes" className="text-emerald-600 underline">
+              Minecraft Chat Color Codes guide
+            </Link>
+            .
+          </p>
         </div>
       </section>
 

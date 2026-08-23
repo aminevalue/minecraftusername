@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { IDEA_CATEGORY_LINKS, LEGAL_LINKS, SITE_NAME, TOOL_LINKS } from "@/lib/site";
+import { COLOR_CODE_LINKS, IDEA_CATEGORY_LINKS, LEGAL_LINKS, SITE_NAME, TOOL_LINKS } from "@/lib/site";
 
 export default function Footer() {
   return (
@@ -16,6 +16,13 @@ export default function Footer() {
           <p className="text-sm font-semibold text-white">Tools</p>
           <ul className="mt-3 space-y-2 text-sm">
             {TOOL_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="hover:text-emerald-400">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            {COLOR_CODE_LINKS.map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="hover:text-emerald-400">
                   {link.label}

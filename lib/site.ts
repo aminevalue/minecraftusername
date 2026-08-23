@@ -116,6 +116,24 @@ export const IDEA_CATEGORY_LINKS: NavLink[] = [
   },
 ];
 
+export const COLOR_CODE_LINKS: NavLink[] = [
+  {
+    href: "/minecraft-color-codes",
+    label: "Minecraft Color Codes",
+    description: "The full reference: all 16 colors, formatting codes, and where they work.",
+  },
+  {
+    href: "/minecraft-chat-color-codes",
+    label: "Minecraft Chat Color Codes",
+    description: "Why typing color codes in vanilla chat doesn't work, and how servers really do it.",
+  },
+  {
+    href: "/minecraft-hex-color-codes",
+    label: "Minecraft Hex Color Codes",
+    description: "Custom RGB colors beyond the basic 16, Java Edition only.",
+  },
+];
+
 export const LEGAL_LINKS: NavLink[] = [
   { href: "/about", label: "About", description: "Who runs this site and why." },
   { href: "/contact", label: "Contact", description: "How to reach us." },
@@ -131,6 +149,7 @@ export const ALL_STATIC_ROUTES: string[] = Array.from(
     "/minecraft-username-ideas",
     ...TOOL_LINKS.map((l) => l.href),
     ...IDEA_CATEGORY_LINKS.map((l) => l.href),
+    ...COLOR_CODE_LINKS.map((l) => l.href),
     ...LEGAL_LINKS.map((l) => l.href),
   ])
 );

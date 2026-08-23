@@ -5,6 +5,8 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import FaqSection from "@/components/FaqSection";
 import RelatedLinks from "@/components/RelatedLinks";
 import type { GeneratorTheme } from "@/lib/generator";
+import { THEME_LABELS, STYLE_LABELS } from "@/lib/generator";
+import { softwareApplicationJsonLd } from "@/lib/schema";
 import { SITE_URL, TOOL_LINKS, IDEA_CATEGORY_LINKS } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -23,6 +25,20 @@ export default async function GeneratorPage(props: PageProps<"/minecraft-usernam
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            softwareApplicationJsonLd({
+              name: "Minecraft Username Generator",
+              description:
+                "Free tool to generate Minecraft username ideas by theme, style, and length, with a direct link to check each one's real availability.",
+              url: `${SITE_URL}/minecraft-username-generator`,
+            })
+          ),
+        }}
+      />
+
       <Breadcrumbs items={[{ name: "Username Generator", href: "/minecraft-username-generator" }]} />
 
       <h1 className="mt-4 text-3xl font-bold text-slate-900 sm:text-4xl">Minecraft Username Generator</h1>
@@ -55,6 +71,26 @@ export default async function GeneratorPage(props: PageProps<"/minecraft-usernam
         </p>
       </section>
 
+      <section className="mt-8 space-y-4 text-slate-700">
+        <h2 className="text-2xl font-semibold text-slate-900">Minecraft Username Themes and Styles</h2>
+        <p>
+          Themes decide the vocabulary a name draws from; styles decide how those words get combined.
+          Picking both narrows results fast instead of scrolling through unrelated suggestions:
+        </p>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>
+            <strong>Themes:</strong> {Object.values(THEME_LABELS).join(", ")} — each pulls from its own
+            hand-picked word list, not a shared generic pool.
+          </li>
+          <li>
+            <strong>Styles:</strong> {Object.values(STYLE_LABELS).join(", ")} — these control the
+            prefixes, suffixes, and number patterns layered on top (e.g. Tryhard leans on{" "}
+            <code className="font-mono text-sm">xX</code>/<code className="font-mono text-sm">TTV</code>
+            -style conventions, OG stays plain and simple).
+          </li>
+        </ul>
+      </section>
+
       <FaqSection
         faqs={[
           {
@@ -71,6 +107,16 @@ export default async function GeneratorPage(props: PageProps<"/minecraft-usernam
             question: "Why do some generated names get rejected as invalid?",
             answer:
               "Minecraft only allows letters, numbers, and underscores, 3–16 characters long. Our generator filters to these rules automatically, so every result you see is a valid format.",
+          },
+          {
+            question: "What's the difference between this generator and the name ideas library?",
+            answer:
+              "The generator creates fresh, randomized combinations on demand from curated word lists. The Name Ideas library is a set of hand-curated, browsable lists organized by category (cool, funny, short, and more) for when you'd rather scroll than generate.",
+          },
+          {
+            question: "Do generated names work for Bedrock Edition too?",
+            answer:
+              "The names themselves are just text and follow the same basic format rules on both editions. Checking availability, however, only works for Java Edition accounts — Bedrock uses Xbox gamertags, which aren't covered by our checker.",
           },
         ]}
       />
