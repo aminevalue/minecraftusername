@@ -41,6 +41,11 @@ export const TOOL_LINKS: NavLink[] = [
     label: "4-Letter Usernames",
     description: "Check short 4-letter names.",
   },
+  {
+    href: "/minecraft-uuid-lookup",
+    label: "UUID Lookup",
+    description: "Find a Minecraft account's UUID, or the username behind a UUID.",
+  },
 ];
 
 export const IDEA_CATEGORY_LINKS: NavLink[] = [

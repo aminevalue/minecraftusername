@@ -133,7 +133,12 @@ export default function ColorCheckerPage() {
           <Link href="/minecraft-username-generator" className="text-emerald-600 underline">
             username generator
           </Link>{" "}
-          can help you find one to check first.
+          can help you find one to check first. Want to see the raw UUID itself, in dashed or
+          undashed format? Use our{" "}
+          <Link href="/minecraft-uuid-lookup" className="text-emerald-600 underline">
+            UUID Lookup tool
+          </Link>
+          .
         </p>
       </section>
 

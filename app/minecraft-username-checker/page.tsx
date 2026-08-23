@@ -160,6 +160,13 @@ export default async function UsernameCheckerPage(props: PageProps<"/minecraft-u
           doesn&apos;t keep a history of past skins, and there&apos;s nothing to show for a name that
           isn&apos;t registered to an account yet.
         </p>
+        <p>
+          Want the account&apos;s UUID as well, in both dashed and undashed format? Our{" "}
+          <Link href="/minecraft-uuid-lookup" className="text-emerald-600 underline">
+            UUID Lookup tool
+          </Link>{" "}
+          shows it alongside the same current-skin preview.
+        </p>
       </section>
 
       <FaqSection

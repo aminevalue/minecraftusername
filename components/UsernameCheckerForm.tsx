@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useId } from "react";
 import Link from "next/link";
+import SkinAvatar from "@/components/SkinAvatar";
 import type { UsernameLookupResult } from "@/lib/mojang";
 
 interface Props {
@@ -159,7 +160,13 @@ function ResultCard({ result, exactLength }: { result: UsernameLookupResult; exa
     return (
       <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
         <div className="flex items-start gap-3">
-          {result.skinUrl && <SkinAvatar skinUrl={result.skinUrl} name={result.exactName ?? result.username} />}
+          {result.skinUrl && (
+            <SkinAvatar
+              skinUrl={result.skinUrl}
+              name={result.exactName ?? result.username}
+              className="border-rose-200"
+            />
+          )}
           <div>
             <p className="font-medium">
               &ldquo;{result.exactName ?? result.username}&rdquo; is currently taken.
@@ -187,32 +194,6 @@ function ResultCard({ result, exactLength }: { result: UsernameLookupResult; exa
         someone else could claim it before you do, and this check doesn&apos;t cover Bedrock gamertags or
         Mojang-blocked words.
       </p>
-    </div>
-  );
-}
-
-const SKIN_AVATAR_SIZE = 56;
-const SKIN_TEXTURE_WIDTH = 64;
-
-function SkinAvatar({ skinUrl, name }: { skinUrl: string; name: string }) {
-  const scale = SKIN_AVATAR_SIZE / 8;
-  return (
-    <div
-      className="shrink-0 overflow-hidden rounded-md border border-rose-200 bg-white"
-      style={{ width: SKIN_AVATAR_SIZE, height: SKIN_AVATAR_SIZE }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element -- cropped via inline transform, next/image can't do this */}
-      <img
-        src={skinUrl}
-        alt={`Current Minecraft skin for ${name}`}
-        style={{
-          maxWidth: "none",
-          width: SKIN_TEXTURE_WIDTH * scale,
-          height: "auto",
-          imageRendering: "pixelated",
-          transform: `translate(-${8 * scale}px, -${8 * scale}px)`,
-        }}
-      />
     </div>
   );
 }

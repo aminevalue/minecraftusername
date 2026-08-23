@@ -87,6 +87,15 @@ export default function UsernameHistoryPage() {
             2022 may still reference old usernames, though these aren&apos;t official and can&apos;t be
             independently verified by us.
           </li>
+          <li>
+            <strong>The account&apos;s UUID</strong> — a permanent ID that stays the same across every
+            username change, useful for cross-referencing an account elsewhere even without its name
+            history. Our{" "}
+            <Link href="/minecraft-uuid-lookup" className="text-emerald-600 underline">
+              UUID Lookup tool
+            </Link>{" "}
+            resolves it from a current username, or the current username from a UUID.
+          </li>
         </ul>
       </section>
 

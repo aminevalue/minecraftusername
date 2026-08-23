@@ -90,6 +90,58 @@ interface SkinTexturePayload {
   };
 }
 
+export type UuidLookupStatus = "found" | "not_found" | "invalid" | "rate_limited" | "error";
+
+export interface UuidLookupResult {
+  status: UuidLookupStatus;
+  uuid: string;
+  username?: string;
+}
+
+const UUID_FORMAT = /^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i;
+
+export function isValidUuidFormat(uuid: string): boolean {
+  return UUID_FORMAT.test(uuid.trim());
+}
+
+/**
+ * Reverse lookup: given a UUID, find the Java Edition account currently
+ * holding it. Uses the same official Mojang session server as the skin
+ * lookup below. Verified live: 200 = found (with name), 204 = well-formed
+ * UUID with no matching account, 400 = malformed UUID, 429 = rate limited.
+ */
+export async function lookupByUuid(rawUuid: string): Promise<UuidLookupResult> {
+  const uuid = rawUuid.trim();
+
+  if (!isValidUuidFormat(uuid)) {
+    return { status: "invalid", uuid };
+  }
+
+  try {
+    const res = await fetch(
+      `https://sessionserver.mojang.com/session/minecraft/profile/${encodeURIComponent(uuid)}`,
+      { headers: { Accept: "application/json" }, cache: "no-store" }
+    );
+
+    if (res.status === 200) {
+      const data = (await res.json()) as { id?: string; name?: string };
+      return { status: "found", uuid, username: data.name };
+    }
+    if (res.status === 204) {
+      return { status: "not_found", uuid };
+    }
+    if (res.status === 400) {
+      return { status: "invalid", uuid };
+    }
+    if (res.status === 429) {
+      return { status: "rate_limited", uuid };
+    }
+    return { status: "error", uuid };
+  } catch {
+    return { status: "error", uuid };
+  }
+}
+
 /**
  * Best-effort lookup of a player's current skin texture URL, straight from
  * Mojang's own session server (the same official source as the username
