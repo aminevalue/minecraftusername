@@ -10,9 +10,9 @@ import { softwareApplicationJsonLd } from "@/lib/schema";
 import { SITE_URL, TOOL_LINKS } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Minecraft Username Color Checker – Locator Bar Color",
+  title: "Minecraft Username Color Checker – Check Locator Bar Color",
   description:
-    "Check your Minecraft username's locator bar color — the exact marker color Java Edition assigns from your UUID — plus a separate tool to preview chat text colors and formatting.",
+    "Check your Minecraft username color — the locator bar marker Java Edition generates from your UUID. Enter a username or UUID for the hex, RGB, and preview.",
   alternates: { canonical: `${SITE_URL}/minecraft-username-color-checker` },
 };
 
@@ -39,8 +39,8 @@ export default function ColorCheckerPage() {
         Minecraft Username Color Checker
       </h1>
       <p className="mt-3 text-slate-600">
-        Enter a Minecraft username or UUID to see the exact locator bar marker color Java Edition
-        assigns to that account.
+        Enter a Minecraft username or UUID to check your Minecraft username color — the exact
+        locator bar marker color Java Edition assigns to that account.
       </p>
 
       <div className="mt-6">
@@ -52,6 +52,16 @@ export default function ColorCheckerPage() {
       </div>
 
       <section className="mt-10 space-y-4 text-slate-700">
+        <h2 className="text-2xl font-semibold text-slate-900">Minecraft Username Color Checker</h2>
+        <p>
+          This tool checks your Minecraft username color the same way the game computes it —
+          there&apos;s no separate lookup table or guesswork involved. Enter either a username or a
+          raw UUID above; either way, the result is the real locator bar marker color for that
+          account, shown as a swatch alongside its hex and RGB values.
+        </p>
+      </section>
+
+      <section className="mt-8 space-y-4 text-slate-700">
         <h2 className="text-2xl font-semibold text-slate-900">What Is the Minecraft Locator Bar Color?</h2>
         <p>
           The locator bar is the HUD strip that shows the direction of nearby players in multiplayer,
@@ -63,10 +73,10 @@ export default function ColorCheckerPage() {
 
       <section className="mt-8 space-y-4 text-slate-700">
         <h2 className="text-2xl font-semibold text-slate-900">
-          How to Check Your Minecraft Locator Bar Color
+          How to Check a Minecraft Username Color
         </h2>
         <ol className="list-decimal space-y-2 pl-5">
-          <li>Enter your Minecraft username (or a UUID, if you already have it) in the tool above.</li>
+          <li>Enter a Minecraft username or a UUID, if you already have one, in the tool above.</li>
           <li>Click &ldquo;Check locator color.&rdquo; For a username, we first resolve it to its account UUID.</li>
           <li>
             The swatch shown is the color that actually renders on the locator bar for that account — you can
@@ -103,7 +113,7 @@ export default function ColorCheckerPage() {
 
       <section className="mt-8 space-y-4 text-slate-700">
         <h2 className="text-2xl font-semibold text-slate-900">
-          How Is a Minecraft Player&apos;s Locator Color Determined?
+          How Minecraft Locator Colors Are Determined
         </h2>
         <p>
           The game runs the account&apos;s UUID through Java&apos;s standard{" "}
@@ -114,21 +124,21 @@ export default function ColorCheckerPage() {
           before drawing the marker — which is why the color you see in-game is usually a bit brighter
           than the raw UUID-derived value.
         </p>
-      </section>
-
-      <section className="mt-8 space-y-4 text-slate-700">
-        <h2 className="text-2xl font-semibold text-slate-900">Minecraft Username, UUID and Locator Color</h2>
         <p>
-          Your username isn&apos;t part of this calculation at all — only your account&apos;s UUID is,
-          and a UUID never changes even when you rename your account. That means your locator bar color
-          stays exactly the same for as long as you keep the same Mojang/Microsoft account, no matter
-          how many times you change your username. It&apos;s also why this tool needs to resolve a
-          username to its UUID before it can compute anything.
+          Notice your username isn&apos;t part of that calculation at all — only the account&apos;s
+          UUID is, and a UUID never changes even when you rename your account. That&apos;s why your
+          Minecraft username color stays exactly the same no matter how many times you change your
+          username, and why this tool resolves a username to its UUID before computing anything.
+          Don&apos;t have an account yet? Our{" "}
+          <Link href="/minecraft-username-generator" className="text-emerald-600 underline">
+            username generator
+          </Link>{" "}
+          can help you find one to check first.
         </p>
       </section>
 
       <section className="mt-8 space-y-4 text-slate-700">
-        <h2 className="text-2xl font-semibold text-slate-900">Minecraft Java Edition Locator Bar Color</h2>
+        <h2 className="text-2xl font-semibold text-slate-900">Java Edition vs Bedrock Edition</h2>
         <p>
           Everything above is specific to <strong>Java Edition</strong>. On <strong>Bedrock Edition</strong>,
           the locator bar exists too, but the color isn&apos;t derived from anything permanent — Bedrock
@@ -139,11 +149,12 @@ export default function ColorCheckerPage() {
       </section>
 
       <section className="mt-12 border-t border-slate-200 pt-8">
-        <h2 className="text-2xl font-semibold text-slate-900">Looking for chat text colors instead?</h2>
+        <h2 className="text-2xl font-semibold text-slate-900">Minecraft Username Color vs Chat Color</h2>
         <p className="mt-3 text-slate-600">
-          The locator bar color above is a marker shown on the multiplayer HUD — it has nothing to do
-          with coloring the text you type. If you want to style chat messages, signs, or books instead,
-          use the chat color and formatting previewer below.
+          Your Minecraft username color (the locator bar marker above) is a completely different
+          thing from chat text color — it has nothing to do with coloring the text you type. If you
+          want to style chat messages, signs, or books instead, use the chat color and formatting
+          previewer below.
         </p>
 
         <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
@@ -170,45 +181,44 @@ export default function ColorCheckerPage() {
             <li>Text components in commands, like <code className="font-mono text-sm">/tellraw</code> and <code className="font-mono text-sm">/title</code></li>
           </ul>
         </div>
-
       </section>
 
       <FaqSection
         faqs={[
           {
-            question: "Can I change my Minecraft locator bar color?",
+            question: "How do I check my Minecraft username color?",
             answer:
-              "Not by yourself in vanilla Java Edition — it's derived automatically from your account UUID. A server admin can override it for you using a scoreboard team color or the /waypoint command.",
+              "Enter your username (or UUID) in the tool at the top of this page. It resolves your account's UUID if needed and shows the exact locator bar marker color Java Edition assigns to it, with hex and RGB values.",
           },
           {
-            question: "Does my locator bar color change when I rename my account?",
+            question: "How do I find my Minecraft locator bar color?",
             answer:
-              "No. The color comes from your UUID, which stays the same for the life of the account regardless of how many times you change your username.",
+              "Same tool, same process — 'locator bar color' and 'username color' describe the same marker on this page. Enter your username or UUID above to see it.",
           },
           {
-            question: "Does this work for Bedrock Edition?",
+            question: "Can I check a Minecraft username color with a UUID?",
             answer:
-              "No — and not because we skipped it. Bedrock assigns the locator color randomly every session, so there's no fixed value tied to your account to check. Only Java Edition derives it from your UUID.",
+              "Yes. The tool accepts either a username or a raw UUID directly — a UUID skips the username lookup step entirely, since the color is computed from the UUID either way.",
           },
           {
-            question: "Why does the tool show two different colors?",
+            question: "What determines the Minecraft locator bar color?",
             answer:
-              "The raw color is what the UUID hash produces before adjustment. The in-game color is what actually renders on the locator bar, after the game resets brightness to 90% while keeping the same hue and saturation.",
+              "Your account's UUID. The game hashes it down to a raw color, then normalizes the brightness to 90% while keeping the hue and saturation, which is the color you actually see in-game. A server can still override it with a team color or the /waypoint command.",
           },
           {
-            question: "Is the locator bar color the same as the chat text color tool on this page?",
+            question: "Does the locator bar color work on Bedrock?",
             answer:
-              "No — they're unrelated Minecraft features. The locator bar color is a per-account marker color shown on the multiplayer HUD; chat color codes style text you type in chat, signs, or books. This page covers both, separately.",
+              "No — not because we skipped it. Bedrock Edition assigns the locator color randomly every session rather than deriving it from anything permanent, so there's no fixed value tied to your account to look up.",
           },
           {
-            question: "Can I make my username a different color permanently?",
+            question: "Is Minecraft username color the same as chat color?",
             answer:
-              "No. Account usernames are always displayed in plain text by Minecraft and Mojang — color codes only apply to text rendered in chat, signs, books, and similar formatted-text contexts, not to the username itself.",
+              "No. Username color refers to the locator bar marker described on this page, computed from your UUID. Chat color codes are unrelated — they style text you type in chat, signs, or books, and don't affect the locator bar at all.",
           },
           {
-            question: "Why doesn't the obfuscated code do anything in the chat color preview?",
+            question: "Why does the tool show two different color values?",
             answer:
-              "The obfuscated format code (k) tells Minecraft to rapidly cycle the displayed characters at random — a live animation that only happens inside the actual game. Our preview shows the underlying text with a note instead of faking the animation.",
+              "The raw value is what the UUID hash produces before adjustment. The in-game value is what actually renders on the locator bar, after brightness is normalized to 90%.",
           },
           {
             question: "Will chat color codes work on every server?",
