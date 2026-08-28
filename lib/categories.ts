@@ -97,15 +97,15 @@ export const CATEGORIES: CategoryContent[] = [
     groups: [
       {
         label: "Puns & wordplay",
-        names: ["Cobblestoned", "Netherlands", "Creeper_Nap", "Enderminate", "PortalToWork", "GrassIsGreener", "BlockAndRoll", "SlimeAndPunishment", "DiggingDeepDebt", "MineOverMatter"],
+        names: ["Cobblestoned", "Netherlands", "Creeper_Nap", "Enderminate", "PortalToWork", "GrassIsGreener", "BlockAndRoll", "SlimeAndPun", "DiggingDeepDebt", "MineOverMatter"],
       },
       {
         label: "Self-deprecating",
-        names: ["Perpetually_Lost", "FallDamageFan", "DiedToAZombie", "AFKMostly", "BadAtPvP", "AccidentalArsonist", "CreeperMagnet", "LagSpikeVictim", "TooManyRespawns", "NeverFoundDiamonds"],
+        names: ["Perpetually_Lost", "FallDamageFan", "DiedToAZombie", "AFKMostly", "BadAtPvP", "AccidentalArson", "CreeperMagnet", "LagSpikeVictim", "TooManyRespawns", "StillNoDiamonds"],
       },
       {
         label: "Absurd & random",
-        names: ["Sir_Waffles_III", "Chicken_Overlord", "Ok_Boomerang", "Emotional_Cow", "Suspicious_Stew", "Goblin_CFO", "Cardboard_Enderman", "Discount_Steve", "Sentient_Dirt", "The_Real_Herobrine"],
+        names: ["Sir_Waffles_III", "Chicken_Overlord", "Ok_Boomerang", "Emotional_Cow", "Suspicious_Stew", "Goblin_CFO", "Cardboard_Ender", "Discount_Steve", "Sentient_Dirt", "Real_Herobrine"],
       },
     ],
     tips: [
