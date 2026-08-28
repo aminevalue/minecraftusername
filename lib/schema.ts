@@ -33,6 +33,21 @@ export function breadcrumbJsonLd(items: { name: string; href: string }[]) {
   };
 }
 
+export function webPageJsonLd(options: { name: string; description: string; url: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: options.name,
+    description: options.description,
+    url: options.url,
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  };
+}
+
 export function softwareApplicationJsonLd(options: { name: string; description: string; url: string }) {
   return {
     "@context": "https://schema.org",
