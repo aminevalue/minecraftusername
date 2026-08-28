@@ -39,7 +39,9 @@ export default function Footer() {
                 All Name Ideas
               </Link>
             </li>
-            {IDEA_CATEGORY_LINKS.slice(0, 6).map((link) => (
+            {IDEA_CATEGORY_LINKS.filter(
+              (link) => !TOOL_LINKS.some((tool) => tool.href === link.href)
+            ).map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="hover:text-emerald-400">
                   {link.label}
