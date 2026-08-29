@@ -20,10 +20,10 @@ export default function ContactPage() {
           get back to you as soon as we can.
         </p>
         <a
-          href="mailto:hello@minecraftusername.com"
+          href="mailto:mohamedlaminebhaje@gmail.com"
           className="inline-block rounded-lg bg-emerald-500 px-5 py-3 font-medium text-slate-950 hover:bg-emerald-400"
         >
-          hello@minecraftusername.com
+          mohamedlaminebhaje@gmail.com
         </a>
         <p>
           For copyright or trademark concerns related to Mojang or Microsoft intellectual property,

@@ -60,8 +60,8 @@ export default function CookiePolicyPage() {
         <h2 className="text-xl font-semibold text-slate-900">Contact</h2>
         <p>
           Questions about this policy can be sent to{" "}
-          <a href="mailto:hello@minecraftusername.com" className="text-emerald-600 underline">
-            hello@minecraftusername.com
+          <a href="mailto:mohamedlaminebhaje@gmail.com" className="text-emerald-600 underline">
+            mohamedlaminebhaje@gmail.com
           </a>
           .
         </p>

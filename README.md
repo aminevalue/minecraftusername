@@ -134,7 +134,7 @@ positions. To go live:
       `/manifest.webmanifest`) all resolve without 404s.
 - [x] 404 page renders with real HTTP 404 status and working links back into the site.
 - [x] Mobile viewport checked (375px) — layout and footer navigation both usable.
-- [ ] Swap the `hello@minecraftusername.com` contact address (used across About/Contact/legal
-      pages) for a real inbox before launch.
+- [x] Contact address across Contact/legal pages now points to a real inbox
+      (`mohamedlaminebhaje@gmail.com`).
 - [ ] Submit sitemap in Search Console once the domain is live (see above).
 - [ ] Add the AdSense script once approved (see above).
