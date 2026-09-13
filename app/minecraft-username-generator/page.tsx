@@ -6,14 +6,28 @@ import FaqSection from "@/components/FaqSection";
 import RelatedLinks from "@/components/RelatedLinks";
 import type { GeneratorTheme } from "@/lib/generator";
 import { THEME_LABELS, STYLE_LABELS } from "@/lib/generator";
-import { softwareApplicationJsonLd } from "@/lib/schema";
+import { softwareApplicationJsonLd, webPageJsonLd } from "@/lib/schema";
 import { SITE_URL, TOOL_LINKS, IDEA_CATEGORY_LINKS } from "@/lib/site";
 
+const PAGE_TITLE = "Minecraft Username Generator — Cool, Short & OG Name Ideas";
+const PAGE_DESCRIPTION =
+  "Generate Minecraft username ideas by theme, style, and length, learn how to evaluate and customize what comes out, then check any result's real availability instantly.";
+
 export const metadata: Metadata = {
-  title: "Minecraft Username Generator — Cool, Short & OG Name Ideas",
-  description:
-    "Generate Minecraft username ideas by theme, style, and length. Filter by fantasy, tech, nature, and more, then check any name's real availability instantly.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
   alternates: { canonical: `${SITE_URL}/minecraft-username-generator` },
+  openGraph: {
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    url: `${SITE_URL}/minecraft-username-generator`,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+  },
 };
 
 const VALID_THEMES = ["fantasy", "nature", "tech", "mythology", "animals", "food", "space", "dark"];
@@ -25,6 +39,18 @@ export default async function GeneratorPage(props: PageProps<"/minecraft-usernam
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            webPageJsonLd({
+              name: "Minecraft Username Generator",
+              description: PAGE_DESCRIPTION,
+              url: `${SITE_URL}/minecraft-username-generator`,
+            })
+          ),
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -91,12 +117,71 @@ export default async function GeneratorPage(props: PageProps<"/minecraft-usernam
         </ul>
       </section>
 
+      {/* NEW: how results are actually built */}
+      <section className="mt-8 space-y-4 text-slate-700">
+        <h2 className="text-2xl font-semibold text-slate-900">How a Result Is Actually Built</h2>
+        <p>
+          Every non-short result follows one of four patterns: a prefix attached to a theme word (
+          <span className="font-mono text-sm">Prime</span> + <span className="font-mono text-sm">Wolf</span>
+          ), a theme word with a suffix (<span className="font-mono text-sm">Wolf</span> +{" "}
+          <span className="font-mono text-sm">Edge</span>), two theme words combined (
+          <span className="font-mono text-sm">Wolf</span> + <span className="font-mono text-sm">Ember</span>
+          ), or a prefix, word, and suffix together — sometimes with a random number tacked on if you&apos;ve
+          enabled numbers. &ldquo;Short names only&rdquo; skips all of that and instead trims the
+          theme&apos;s shortest word down to 6 characters, optionally followed by a number.
+        </p>
+        <p>
+          Knowing the pattern makes a result easy to hand-edit once you see one you almost like: keep
+          the prefix or suffix and swap in a different theme word yourself, try the same word with a
+          different style&apos;s suffix, or drop a random number and pick your own.
+        </p>
+      </section>
+
+      {/* NEW: evaluating results */}
+      <section className="mt-8 space-y-4 text-slate-700">
+        <h2 className="text-2xl font-semibold text-slate-900">How to Evaluate a Generated Result</h2>
+        <p>
+          A batch of twelve results is meant to be skimmed, not all checked one by one. Before you
+          click &ldquo;Check&rdquo; on anything, filter mentally first:
+        </p>
+        <ul className="list-disc space-y-2 pl-5">
+          <li>Say it out loud — if you stumble on it, a real audience will too.</li>
+          <li>Ignore results that only technically match your theme but don&apos;t feel like it.</li>
+          <li>Prefer a result you&apos;d still be fine with in six months over one that&apos;s just novel right now.</li>
+          <li>If two results are close, combine them yourself rather than picking blindly — see below.</li>
+        </ul>
+      </section>
+
+      {/* NEW: customizing */}
+      <section className="mt-8 space-y-4 text-slate-700">
+        <h2 className="text-2xl font-semibold text-slate-900">Customizing What You Generate</h2>
+        <p>
+          You&apos;re not limited to accepting a result exactly as generated:
+        </p>
+        <ul className="list-disc space-y-2 pl-5">
+          <li>Regenerate within the same theme and style until the pattern lands right, rather than switching themes immediately.</li>
+          <li>Manually recombine two results — take the prefix from one and the word from another.</li>
+          <li>Toggle numbers on or off and regenerate to see the same words in a plainer or more decorated form.</li>
+          <li>Trim a longer result down yourself if it&apos;s close to the 16-character limit but not quite comfortable to type.</li>
+        </ul>
+      </section>
+
       <FaqSection
         faqs={[
           {
             question: "Are the generated names guaranteed to be available?",
             answer:
               "No. The generator combines curated words into new usernames, but it doesn't check Mojang's data automatically. Always click 'Check' to verify a specific name before you try to claim it.",
+          },
+          {
+            question: "Can I control the exact length of a generated name?",
+            answer:
+              "Not directly. 'Short names only' biases results toward shorter output by trimming the theme's shortest word to 6 characters plus an optional number, but it doesn't target an exact length. For an exact length, use the dedicated 3-Letter or 4-Letter checkers instead.",
+          },
+          {
+            question: "Why does a result look like two unrelated words mixed together?",
+            answer:
+              "That's one of the generator's own combination patterns — two words from the same theme's list joined directly, no prefix or suffix. It's intentional, not a glitch, though it won't suit every theme equally well.",
           },
           {
             question: "Can I generate short names with the generator?",
