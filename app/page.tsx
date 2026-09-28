@@ -89,6 +89,10 @@ export default function HomePage() {
         </p>
       </section>
 
+      <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+        <AdSlot size="in-content" />
+      </section>
+
       <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <h2 className="text-2xl font-semibold text-slate-900">What you can do here</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -159,10 +163,6 @@ export default function HomePage() {
             See all name ideas →
           </Link>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <AdSlot size="in-content" />
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
