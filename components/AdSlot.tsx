@@ -25,12 +25,6 @@ const DEFAULT_AD_SLOT: Partial<Record<AdSlotSize, string>> = {
   "in-content": "8884592061",
 };
 
-// How long to keep the slot's normal reserved space for a still-pending ad
-// request before collapsing it. Google doesn't always set data-ad-status on
-// a genuine no-fill, so this timeout is what guarantees the slot never stays
-// visually reserved forever when that happens.
-const FILL_TIMEOUT_MS = 5000;
-
 /**
  * Ad slot. Renders a real AdSense <ins class="adsbygoogle"> unit when a real
  * ad-slot ID is available for this size (via the `adSlot` prop or
@@ -38,11 +32,12 @@ const FILL_TIMEOUT_MS = 5000;
  * script is already present site-wide (see app/layout.tsx) — this component
  * never loads it again.
  *
- * No placeholder label or box is ever shown. A filled ad (data-ad-status
- * "filled") displays normally; an unfilled one, or one Google never resolves
- * within FILL_TIMEOUT_MS, collapses its reserved space to zero height so it
- * never leaves a large blank section. The <ins> itself is never removed, so
- * Google keeps receiving legitimate requests and a late fill still un-collapses it.
+ * No placeholder label or box is ever shown. While Google hasn't resolved the
+ * request yet, the slot keeps its normal reserved space (no fake content).
+ * Only an explicit data-ad-status="unfilled" collapses it to zero height;
+ * "filled" keeps it visible with the ad. There is no timeout-based collapse —
+ * a still-pending request is never treated as unfilled, so a real fill that
+ * takes longer to resolve is never hidden.
  */
 export default function AdSlot({
   size = "in-content",
@@ -57,7 +52,7 @@ export default function AdSlot({
   const slot = adSlot ?? DEFAULT_AD_SLOT[size];
   const insRef = useRef<HTMLModElement>(null);
   const pushedRef = useRef(false);
-  const [phase, setPhase] = useState<"loading" | "filled" | "collapsed">("loading");
+  const [phase, setPhase] = useState<"pending" | "filled" | "unfilled">("pending");
 
   // Request the ad exactly once per mounted <ins> element — but only once its
   // container actually has a measurable width. Pushing before layout settles
@@ -74,7 +69,7 @@ export default function AdSlot({
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       } catch {
-        // AdSense script not ready/blocked — the loading timeout below will collapse the slot.
+        // AdSense script not ready/blocked — the slot stays reserved, pending Google's response.
       }
       return true;
     };
@@ -88,9 +83,9 @@ export default function AdSlot({
     return () => observer.disconnect();
   }, [slot]);
 
-  // Watch Google's own fill status, with a bounded grace period for a still-
-  // pending request — Google doesn't always set data-ad-status even on a
-  // genuine no-fill, so a status-only check could stay reserved forever.
+  // Watch Google's own fill status directly — no timeout, no guessing. A
+  // still-pending request (status not yet set) keeps its normal reserved
+  // space until Google explicitly resolves it one way or the other.
   useEffect(() => {
     if (!slot || !insRef.current) return;
     const el = insRef.current;
@@ -98,27 +93,19 @@ export default function AdSlot({
     const sync = () => {
       const status = el.getAttribute("data-ad-status");
       if (status === "filled") setPhase("filled");
-      else if (status === "unfilled") setPhase("collapsed");
+      else if (status === "unfilled") setPhase("unfilled");
     };
     sync();
 
     const observer = new MutationObserver(sync);
     observer.observe(el, { attributes: true, attributeFilter: ["data-ad-status"] });
-
-    const timeout = window.setTimeout(() => {
-      setPhase((current) => (current === "loading" ? "collapsed" : current));
-    }, FILL_TIMEOUT_MS);
-
-    return () => {
-      observer.disconnect();
-      window.clearTimeout(timeout);
-    };
+    return () => observer.disconnect();
   }, [slot]);
 
   if (!slot) return null;
 
   return (
-    <div className={`mx-auto ${phase === "collapsed" ? "h-0 overflow-hidden" : SIZE_CLASSES[size]} ${className}`}>
+    <div className={`mx-auto ${phase === "unfilled" ? "h-0 overflow-hidden" : SIZE_CLASSES[size]} ${className}`}>
       <ins
         ref={insRef}
         className="adsbygoogle"
