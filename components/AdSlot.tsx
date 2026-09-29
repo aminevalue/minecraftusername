@@ -16,7 +16,7 @@ const SIZE_CLASSES: Record<AdSlotSize, string> = {
   sidebar: "min-h-[250px] w-full max-w-[300px]",
 };
 
-const AD_CLIENT = "ca-pub-6402641178305242";
+const AD_CLIENT = "ca-pub-4795416980317844";
 
 // Real AdSense ad units, keyed by slot size. Only "in-content" has a real
 // unit today ("Minecraft Username - In Content"); sizes with no entry here
