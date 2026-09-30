@@ -38,6 +38,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "AyHlgtZNvcxqWKnHXgLWSJgtG0RyZDkyBxFv-uc49uE",
+    other: {
+      "google-adsense-account": "ca-pub-4795416980317844",
+    },
   },
 };
 
